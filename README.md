@@ -46,4 +46,8 @@ But if you don't use a plugin manager, you can download the source code and put 
 
 ## Requirements
 
-MRSpec is a pure vimscript plugin, but only make sense if you are working a ruby/rspec project. So you need be able to run `rspec` on your terminal.
+MRSpec is a pure vimscript plugin, but only make sense if you are working on ruby/rspec project. So you need be able to run `rspec` on your terminal for your project.
+
+## License
+
+MIT
