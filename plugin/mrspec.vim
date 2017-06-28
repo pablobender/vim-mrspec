@@ -32,7 +32,11 @@ endfunction
 
 function! mrspec#Run()
   if exists('s:location')
-    call s:SystemEcho('Running last spec(s): ' . s:location)
+    let l:location = s:location
+    if l:location = ''
+      let l:location = '*all specs*'
+    endif
+    call s:SystemEcho('Running last spec(s): ' . l:location)
     return s:RunSpec()
   endif
   return mrspec#RunAll()
