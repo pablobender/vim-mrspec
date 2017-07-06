@@ -9,35 +9,31 @@ let s:loaded = 1
 function! mrspec#RunLine()
   if s:InSpecFile()
     call s:SetSpecLocation(expand('%'), line('.'))
-    call s:SystemEcho('Running spec(s) for line: ' . s:location)
-    return s:RunSpec()
+    return s:RunSpec('Running spec(s) for line: ' . s:location)
   endif
-  echomsg '*** Current buffer isn''t a spec. (' . expand('%') . ')'
+  echo '*** Current buffer isn''t a spec. (' . expand('%') . ')'
 endfunction
 
 function! mrspec#RunFile()
   if s:InSpecFile()
     call s:SetSpecLocation(expand('%'))
-    call s:SystemEcho('Running spec(s) from file: ' . s:location)
-    return s:RunSpec()
+    return s:RunSpec('Running spec(s) from file: ' . s:location)
   endif
-  echomsg '*** Current buffer isn''t a spec. (' . expand('%') . ')'
+  echo '*** Current buffer isn''t a spec. (' . expand('%') . ')'
 endfunction
 
 function! mrspec#RunAll()
   call s:SetSpecLocation()
-  call s:SystemEcho('Running all specs')
-  return s:RunSpec()
+  return s:RunSpec('Running all specs')
 endfunction
 
 function! mrspec#Run()
   if exists('s:location')
     let l:location = s:location
-    if l:location = ''
+    if l:location == ''
       let l:location = '*all specs*'
     endif
-    call s:SystemEcho('Running last spec(s): ' . l:location)
-    return s:RunSpec()
+    return s:RunSpec('Running last spec(s): ' . l:location)
   endif
   return mrspec#RunAll()
 endfunction
@@ -78,11 +74,12 @@ function! s:SetSpecLocation(...)
   endif
 endfunction
 
-function! s:RunSpec()
+function! s:RunSpec(message)
   if s:IsModified(s:spec)
-    echomsg '*** Buffer is modified! Please save it to run. (' . s:spec . ')'
+    echo '*** Buffer is modified! Please save it to run. (' . s:spec . ')'
     return 0
   endif
+  call s:SystemEcho(a:message)
   call s:SetMakeprg()
   execute 'make! ' . s:location  . '|cwindow'
   call s:RestoreMakeprg()
@@ -90,5 +87,8 @@ function! s:RunSpec()
 endfunction
 
 function! s:SystemEcho(msg)
-  silent execute '!echo "\n\n\nMRSpec: ' . a:msg '"'
+  silent execute '!echo ""'
+  silent execute '!echo "\#"'
+  silent execute '!echo "\# MRSpec: ' . a:msg '"'
+  silent execute '!echo "\#"'
 endfunction
